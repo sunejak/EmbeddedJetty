@@ -3,6 +3,7 @@ package com.ntnu.sune.resource;
 import javax.annotation.security.PermitAll;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.util.logging.Level;
@@ -26,12 +27,13 @@ public class ServerStatus {
      * @return Amount of free memory and time since 1970
      */
     @GET
+    @Produces({ MediaType.TEXT_PLAIN })
     public Response getServerStatus( @Context UriInfo uriInfo) {
 
             long now = System.currentTimeMillis();
             long freeMem = Runtime.getRuntime().freeMemory();
         LOGGER.log(Level.ALL, "Got Called with GET");
             return Response.status(Response.Status.OK).entity("Free Memory: " + freeMem
-                    + " bytes " + now + "\n").build();
+                    + " bytes at Time: " + now + "\n").build();
     }
 }

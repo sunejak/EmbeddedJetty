@@ -19,7 +19,7 @@ public class WebServer {
         portNumber = num;
     }
 
-    public WebServer() throws  Exception {
+    public WebServer()  {
         Server server = new Server(portNumber);
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
@@ -37,8 +37,14 @@ public class WebServer {
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletB(100)), "/test/*");
 
+        System.out.println("Starting " + WebServer.class.getName() + " on port: " + portNumber);
+        try {
         server.start();
         server.join();
+        } catch (Exception e){
+            System.out.println("Failed " + WebServer.class.getName() + " on port: " + portNumber);
+            System.exit(1);
+        }
     }
  
     public static void main(String[] args) throws Exception {
