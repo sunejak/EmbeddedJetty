@@ -2,11 +2,15 @@ package com.ntnu.sune.server;
 
 import com.ntnu.sune.resource.DumpServletA;
 import com.ntnu.sune.resource.DumpServletB;
-import com.ntnu.sune.resource.ServerStatus;
+import com.sun.jersey.spi.container.servlet.ServletContainer;
+
 import org.eclipse.jetty.server.Server;
+
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
- 
+
+// http://localhost:8089/jax/application.wadl
+
 public class WebServer {
 
     int portNumber = 8089;
@@ -17,12 +21,22 @@ public class WebServer {
 
     public WebServer() throws  Exception {
         Server server = new Server(portNumber);
-        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/");
-        server.setHandler(context);
-        context.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
-        context.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
-        context.addServlet(new ServletHolder(new DumpServletB(100)), "/test/*");
+        final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
+
+        servletHolder.setInitParameter("com.sun.jersey.config.property.packages","com.ntnu.sune.resource");
+        servletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
+        servletHolder.setInitParameter("com.sun.jersey.config.feature.DisableWADL", "false");
+        servletHolder.setInitParameter("com.sun.jersey.spi.container.ContainerResponseFilters", "com.ntnu.sune.resource.MonitoringResponseFilter");
+
+        servletContextHandler.setContextPath("/");
+        server.setHandler(servletContextHandler);
+
+        servletContextHandler.addServlet(servletHolder, "/jax/*");
+        servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
+        servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
+        servletContextHandler.addServlet(new ServletHolder(new DumpServletB(100)), "/test/*");
+
         server.start();
         server.join();
     }
