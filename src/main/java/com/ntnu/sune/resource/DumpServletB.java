@@ -9,7 +9,7 @@ import java.io.IOException;
 @SuppressWarnings("serial")
 public class DumpServletB extends HttpServlet
 {
-    static Integer cnt;
+    private static Integer cnt;
     public DumpServletB()
     {
         cnt = 0;

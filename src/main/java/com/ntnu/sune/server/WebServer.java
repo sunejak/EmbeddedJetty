@@ -13,7 +13,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 
 public class WebServer {
 
-    int portNumber = 8089;
+    private int portNumber = 8089;
 
     public WebServer(int num) {
         portNumber = num;

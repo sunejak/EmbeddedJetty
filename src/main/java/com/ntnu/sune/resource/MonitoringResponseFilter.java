@@ -15,11 +15,15 @@ import java.util.logging.Logger;
 public class MonitoringResponseFilter implements ContainerResponseFilter {
 
     private static final Logger LOGGER = Logger.getLogger(MonitoringResponseFilter.class.getName());
+    private static final MonitoringResponseFilter mf = new MonitoringResponseFilter();
 
-    static Integer cnt = new Integer(0);
+    private static Integer cnt = 0;
+
+    public static MonitoringResponseFilter getInstance(){
+        return mf;
+    }
 
     int getCount() {
-
         return cnt;
     }
 

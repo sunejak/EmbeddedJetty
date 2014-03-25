@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 @SuppressWarnings("serial")
 public class DumpServletA extends HttpServlet
 {
-    static Integer cnt;
+    private static Integer cnt = 0;
     public DumpServletA()
     {
         cnt = 0;
