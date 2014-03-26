@@ -8,18 +8,21 @@ import org.eclipse.jetty.server.Server;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import tokenserver.Receive_Token;
 
 // http://localhost:8089/jax/application.wadl
 
 public class WebServer {
 
-    private int portNumber = 8089;
+    public WebServer() {
 
-    public WebServer(int num) {
-        portNumber = num;
+        new WebServer(8089);
     }
 
-    public WebServer()  {
+    public WebServer(int port)  {
+
+        int portNumber = port;
+        System.out.println("Initialing:  " + portNumber);
         Server server = new Server(portNumber);
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
@@ -37,6 +40,9 @@ public class WebServer {
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletB(100)), "/test/*");
 
+        servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/*");
+
+
         System.out.println("Starting " + WebServer.class.getName() + " on port: " + portNumber);
         try {
         server.start();
@@ -47,12 +53,20 @@ public class WebServer {
         }
     }
  
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 
-        if(args.length > 1){
-            new WebServer(Integer.parseInt(args[0]));
+        try {
+        if(args.length > 0){
+            System.out.println("Try parsing: " + args[0]);
+            int port = Integer.parseInt(args[0].trim());
+            new WebServer(port);
         } else {
             new WebServer();
+        }
+        }
+        catch (Exception e){
+            System.out.println("Failed...");
+            e.printStackTrace();
         }
     }
 }
