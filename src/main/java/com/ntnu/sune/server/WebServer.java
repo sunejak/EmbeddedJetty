@@ -1,7 +1,6 @@
 package com.ntnu.sune.server;
 
 import com.ntnu.sune.resource.DumpServletA;
-import com.ntnu.sune.resource.DumpServletB;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import org.eclipse.jetty.server.Server;
@@ -21,15 +20,15 @@ public class WebServer {
 
     public WebServer(int port)  {
 
-        int portNumber = port;
-        System.out.println("Initialing:  " + portNumber);
-        Server server = new Server(portNumber);
+        System.out.println("Initialing:  " + port);
+        Server server = new Server(port);
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
-
-        servletHolder.setInitParameter("com.sun.jersey.config.property.packages","com.ntnu.sune.resource");
+        // set resource classes to scan
+        servletHolder.setInitParameter("com.sun.jersey.config.property.packages", "com.ntnu.sune.resource");
         servletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
         servletHolder.setInitParameter("com.sun.jersey.config.feature.DisableWADL", "false");
+        // add monitoring filter
         servletHolder.setInitParameter("com.sun.jersey.spi.container.ContainerResponseFilters", "com.ntnu.sune.resource.MonitoringResponseFilter");
 
         servletContextHandler.setContextPath("/");
@@ -38,17 +37,14 @@ public class WebServer {
         servletContextHandler.addServlet(servletHolder, "/jax/*");
         servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
-        servletContextHandler.addServlet(new ServletHolder(new DumpServletB(100)), "/test/*");
+        servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/Receive_Token");
 
-        servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/*");
-
-
-        System.out.println("Starting " + WebServer.class.getName() + " on port: " + portNumber);
+        System.out.println("Starting " + WebServer.class.getName() + " on port: " + port);
         try {
         server.start();
         server.join();
         } catch (Exception e){
-            System.out.println("Failed " + WebServer.class.getName() + " on port: " + portNumber);
+            System.out.println("Failed " + WebServer.class.getName() + " on port: " + port);
             System.exit(1);
         }
     }

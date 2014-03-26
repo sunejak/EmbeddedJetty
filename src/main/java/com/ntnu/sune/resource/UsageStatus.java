@@ -35,7 +35,18 @@ public class UsageStatus {
         LOGGER.log(Level.ALL, "Got Called with GET");
         MonitoringResponseFilter monitoringResponseFilter = MonitoringResponseFilter.getInstance();
         if(monitoringResponseFilter != null){
-            return Response.status(Response.Status.OK).entity("Number of invocations: " + monitoringResponseFilter.getCount() + "\n").build();
+
+            StringBuilder text = new StringBuilder();
+            text.append("Number of invocations: \n");
+            Integer[] count = monitoringResponseFilter.getCount();
+            Response.Status[] responseStatus = Response.Status.values();
+
+            for (int x = 0; x < count.length; x++){
+
+                if(count[x] != null)text.append(responseStatus[x].toString()).append(" : ").append(count[x].toString());
+            }
+
+            return Response.status(Response.Status.OK).entity(text.toString()).build();
         }
         return null;
     }

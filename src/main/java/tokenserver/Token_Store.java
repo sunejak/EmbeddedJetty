@@ -20,7 +20,7 @@ public class Token_Store {
     // Counts instantiations. Should always be  0 or 1
     private static int numberOfInstances;
     public static final int interval = 30000;
-	public static final String version = "30 Oct 2011"; 
+	public static final String version = "26 Mar 2014";
 
     // You could add = new SingletonX() at the end of the
     // next line for simple non-lazy initialisation,

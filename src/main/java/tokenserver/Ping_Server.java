@@ -25,7 +25,7 @@ public class Ping_Server {
         for(int ii=0; ii<args.length; ii++){
 
             nt[ii] = new SimpleThread(args[ii], 0);
-            nt[ii+(args.length*1)] = new SimpleThread(args[ii], 0);
+            nt[ii+(args.length)] = new SimpleThread(args[ii], 0);
             nt[ii+(args.length*2)] = new SimpleThread(args[ii], 0);
             nt[ii+(args.length*3)] = new SimpleThread(args[ii], 0);
             nt[ii+(args.length*4)] = new SimpleThread(args[ii], 0);
@@ -33,6 +33,7 @@ public class Ping_Server {
 
         Calendar cal = Calendar.getInstance();
 
+        //noinspection InfiniteLoopStatement
         while(true){
             long now = System.currentTimeMillis();
 

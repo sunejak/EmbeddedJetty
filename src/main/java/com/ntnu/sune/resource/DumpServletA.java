@@ -11,15 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 public class DumpServletA extends HttpServlet
 {
     private static Integer cnt = 0;
-    public DumpServletA()
-    {
-        cnt = 0;
-    }
-
-    public DumpServletA(int n)
-    {
-        cnt = n;
-    }
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException

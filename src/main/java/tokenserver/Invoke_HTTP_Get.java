@@ -40,15 +40,17 @@ public class Invoke_HTTP_Get {
             in.close();
             connection.disconnect();
             readStamp = System.currentTimeMillis();
-            if((readStamp - entryStamp) > max_time){  m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Timeissue_with: " + " Connect: " + (readStamp-entryStamp) ;
+            if((readStamp - entryStamp) > max_time){  m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Time_issue_with: " + " Connect: " + (readStamp-entryStamp) ;
                 if(test > 3)System.out.println(m);
             }
 
             code = connection.getResponseCode();
             String msg = connection.getResponseMessage();
 
-            m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
-                    + code + " " + msg + " "  + last_known.getTime() + " Mem: " + txt.substring(18);
+            if(txt != null){
+                m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
+                        + code + " " + msg + " "  + last_known.getTime() + " Mem: " + txt.substring(18);
+            }
             if((readStamp - entryStamp) > max_time)m = m + " Time_issue";
             if(test > 3)System.out.println(m);
 
@@ -81,6 +83,5 @@ public class Invoke_HTTP_Get {
         String n = ihp.action(args[0], 3, m++);
         long stop = System.currentTimeMillis();
         System.out.println("Invoke_HTTP_Get(main): sendt to " + args[0] + " " + n + " took: " + (stop - start) + "ms");
-    };
-
+    }
 }
