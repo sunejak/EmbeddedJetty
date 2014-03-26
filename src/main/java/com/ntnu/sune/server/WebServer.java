@@ -4,6 +4,7 @@ import com.ntnu.sune.resource.DumpServletA;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
 import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
 
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
@@ -15,13 +16,19 @@ public class WebServer {
 
     public WebServer() {
 
-        new WebServer(8089);
+        new WebServer("localhost" , 8089);
     }
 
-    public WebServer(int port)  {
+    public WebServer(String name, int port)  {
 
-        System.out.println("Initialing:  " + port);
-        Server server = new Server(port);
+        System.out.println("Initialing:  " + name + " on port: " + port);
+        Server server = new Server();
+        ServerConnector http = new ServerConnector(server);
+        http.setHost(name);
+        http.setPort(port);
+        http.setIdleTimeout(30000L);
+        server.addConnector(http);
+
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
         // set resource classes to scan
@@ -53,9 +60,9 @@ public class WebServer {
 
         try {
         if(args.length > 0){
-            System.out.println("Try parsing: " + args[0]);
-            int port = Integer.parseInt(args[0].trim());
-            new WebServer(port);
+            String name = args[0];
+            int port = Integer.parseInt(args[1].trim());
+            new WebServer(name, port);
         } else {
             new WebServer();
         }
