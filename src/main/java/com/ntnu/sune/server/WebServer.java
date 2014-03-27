@@ -51,7 +51,7 @@ public class WebServer {
         servletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
         // show wadl
         servletHolder.setInitParameter("com.sun.jersey.config.feature.DisableWADL", "false");
-        // add monitoring filter
+        // add monitoring filter for jersey
         servletHolder.setInitParameter("com.sun.jersey.spi.container.ContainerResponseFilters", "com.ntnu.sune.resource.MonitoringResponseFilter");
 
         // add servlets
@@ -61,7 +61,7 @@ public class WebServer {
         servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/Receive_Token");
 
         // add security handler
-        servletContextHandler.setSecurityHandler(basicAuth("demo", "hello", "private"));
+        // servletContextHandler.setSecurityHandler(basicAuth("demo", "hello", "private"));
 
         // servletContextHandler.setContextPath("/");
 
