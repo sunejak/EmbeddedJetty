@@ -15,23 +15,21 @@ public class Invoke_HTTP_Get {
 
     String action(String url, int test, int cnt) {
 
-        int pretxt = System.identityHashCode(this);
+        long entryStamp = System.currentTimeMillis();
+        long readStamp;
+        int identityHashCode = System.identityHashCode(this);
         Calendar last_known = Calendar.getInstance();
-        HttpURLConnection connection = null;
-        int code = -1;
-        URL invoke = null;
+        int code;
         InetAddress address = null;
         String m = null;
         String txt = null;
-        long entryStamp = System.currentTimeMillis();
-        long readStamp = 0;
 
         try {
-            invoke = new URL(url);
+            URL invoke = new URL(url + "?cnt=" + cnt);
             address = InetAddress.getByName(invoke.getHost());
-            connection = (HttpURLConnection) invoke.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) invoke.openConnection();
             connection.setDoOutput(true);
-            BufferedReader in =  new BufferedReader( new InputStreamReader( connection.getInputStream() ) );
+            BufferedReader in =  new BufferedReader( new InputStreamReader( connection.getInputStream(), "UTF-8" ) );
             String response;
             while ((response = in.readLine()) != null ) {
                 if(test > 5)System.out.println("Invoke_HTTP_Get: " + response);
@@ -40,7 +38,7 @@ public class Invoke_HTTP_Get {
             in.close();
             connection.disconnect();
             readStamp = System.currentTimeMillis();
-            if((readStamp - entryStamp) > max_time){  m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Time_issue_with: " + " Connect: " + (readStamp-entryStamp) ;
+            if((readStamp - entryStamp) > max_time){  m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Time_issue_with: " + " Connect: " + (readStamp-entryStamp) ;
                 if(test > 3)System.out.println(m);
             }
 
@@ -48,7 +46,7 @@ public class Invoke_HTTP_Get {
             String msg = connection.getResponseMessage();
 
             if(txt != null){
-                m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
+                m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
                         + code + " " + msg + " "  + last_known.getTime() + " Mem: " + txt.substring(18);
             }
             if((readStamp - entryStamp) > max_time)m = m + " Time_issue";
@@ -56,13 +54,13 @@ public class Invoke_HTTP_Get {
 
         } catch (MalformedURLException e) {
             readStamp = System.currentTimeMillis();
-            m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
+            m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
                     + -1 + " MalformedURLException " + last_known.getTime() + " Mem: 0 " + last_known.getTime();
             if(test > 3)System.out.println(m);
             //			                                e.printStackTrace();
         } catch (IOException e) {
             readStamp = System.currentTimeMillis();
-            m = "Invoke_HTTP_Get_" + cnt + ": (" + pretxt + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
+            m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
                     + -1 + " IOException "  + " "  + last_known.getTime() + " Mem: 0 " + last_known.getTime();
             if(test > 3)System.out.println(m);
             //			                                e.printStackTrace();
@@ -80,8 +78,8 @@ public class Invoke_HTTP_Get {
         }
         System.out.println("Invoke_HTTP_Get(main): invoking " + args[0]);
         int m = 0;
-        String n = ihp.action(args[0], 3, m++);
+        String n = ihp.action(args[0], 3, m);
         long stop = System.currentTimeMillis();
-        System.out.println("Invoke_HTTP_Get(main): sendt to " + args[0] + " " + n + " took: " + (stop - start) + "ms");
+        System.out.println("Invoke_HTTP_Get(main): sent to " + args[0] + " " + n + " took: " + (stop - start) + "ms");
     }
 }

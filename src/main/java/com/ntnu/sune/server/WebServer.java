@@ -3,11 +3,24 @@ package com.ntnu.sune.server;
 import com.ntnu.sune.resource.DumpServletA;
 import com.sun.jersey.spi.container.servlet.ServletContainer;
 
+import org.eclipse.jetty.security.ConstraintMapping;
+import org.eclipse.jetty.security.ConstraintSecurityHandler;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.SecurityHandler;
+import org.eclipse.jetty.security.authentication.BasicAuthenticator;
+import org.eclipse.jetty.server.Handler;
+import org.eclipse.jetty.server.NCSARequestLog;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 
+import org.eclipse.jetty.server.handler.DefaultHandler;
+import org.eclipse.jetty.server.handler.HandlerCollection;
+import org.eclipse.jetty.server.handler.RequestLogHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
+import org.eclipse.jetty.util.security.Constraint;
+import org.eclipse.jetty.util.security.Credential;
+
 import tokenserver.Receive_Token;
 
 // http://localhost:8089/jax/application.wadl
@@ -21,33 +34,53 @@ public class WebServer {
 
     public WebServer(String name, int port)  {
 
-        System.out.println("Initialing:  " + name + " on port: " + port);
         Server server = new Server();
-        ServerConnector http = new ServerConnector(server);
-        http.setHost(name);
-        http.setPort(port);
-        http.setIdleTimeout(30000L);
-        server.addConnector(http);
 
+        ServerConnector serverConnector = new ServerConnector(server);
+        serverConnector.setHost(name);
+        serverConnector.setPort(port);
+        serverConnector.setIdleTimeout(30000L);
+        server.addConnector(serverConnector);
+
+        // use a jersey based servlet
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
         final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
         // set resource classes to scan
         servletHolder.setInitParameter("com.sun.jersey.config.property.packages", "com.ntnu.sune.resource");
+        // allow some Java Objects
         servletHolder.setInitParameter("com.sun.jersey.api.json.POJOMappingFeature", "true");
+        // show wadl
         servletHolder.setInitParameter("com.sun.jersey.config.feature.DisableWADL", "false");
         // add monitoring filter
         servletHolder.setInitParameter("com.sun.jersey.spi.container.ContainerResponseFilters", "com.ntnu.sune.resource.MonitoringResponseFilter");
 
-        servletContextHandler.setContextPath("/");
-        server.setHandler(servletContextHandler);
-
+        // add servlets
         servletContextHandler.addServlet(servletHolder, "/jax/*");
-        servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
+        // TODO remove? servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
         servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/Receive_Token");
 
+        // add security handler
+        servletContextHandler.setSecurityHandler(basicAuth("demo", "hello", "private"));
+
+        // servletContextHandler.setContextPath("/");
+
+        // add some logging
+        RequestLogHandler requestLogHandler = new RequestLogHandler();
+        NCSARequestLog requestLog = new NCSARequestLog("./logs/jetty-yyyy_mm_dd.log");
+        requestLog.setRetainDays(90);
+        requestLog.setAppend(true);
+        requestLog.setExtended(false);
+        requestLog.setLogTimeZone("GMT");
+        requestLogHandler.setRequestLog(requestLog);
+        // fix all the handlers
+        HandlerCollection handlers = new HandlerCollection();
+        handlers.setHandlers(new Handler[]{servletContextHandler, new DefaultHandler(), requestLogHandler});
+        server.setHandler(handlers);
+
         System.out.println("Starting " + WebServer.class.getName() + " on port: " + port);
         try {
+
         server.start();
         server.join();
         } catch (Exception e){
@@ -55,7 +88,31 @@ public class WebServer {
             System.exit(1);
         }
     }
- 
+
+    private static SecurityHandler basicAuth(String username, String password, String realm) {
+
+        HashLoginService hashLoginService = new HashLoginService();
+        hashLoginService.putUser(username, Credential.getCredential(password), new String[]{"user"});
+        hashLoginService.setName(realm);
+
+        Constraint constraint = new Constraint();
+        constraint.setName(Constraint.__BASIC_AUTH);
+        constraint.setRoles(new String[]{"user"});
+        constraint.setAuthenticate(true);
+
+        ConstraintMapping constraintMapping = new ConstraintMapping();
+        constraintMapping.setConstraint(constraint);
+        constraintMapping.setPathSpec("/*");
+
+        ConstraintSecurityHandler constraintSecurityHandler = new ConstraintSecurityHandler();
+        constraintSecurityHandler.setAuthenticator(new BasicAuthenticator());
+        constraintSecurityHandler.setRealmName("myrealm");
+        constraintSecurityHandler.addConstraintMapping(constraintMapping);
+        constraintSecurityHandler.setLoginService(hashLoginService);
+
+        return constraintSecurityHandler;
+    }
+
     public static void main(String[] args) {
 
         try {

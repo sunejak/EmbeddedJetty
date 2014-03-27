@@ -11,7 +11,7 @@ import java.util.Calendar;
 
 public class Invoke_HTTP_Post {
 
-    Invoke_HTTP_Post() { };
+    Invoke_HTTP_Post() { }
 
     int action(String url, String[] arr) {
     
@@ -50,7 +50,7 @@ public class Invoke_HTTP_Post {
         
         long readStamp = System.currentTimeMillis();
         
-        if((readStamp - entryStamp) > 5000){ String m = "Invoke_HTTP_Post (" + pretxt + "): Timeissue with: " + arr[0] 
+        if((readStamp - entryStamp) > 5000){ String m = "Invoke_HTTP_Post (" + pretxt + "): Time_issue with: " + arr[0]
                     + " Connect: " + (connectStamp-entryStamp) 
                     + " ms  Write: " + (writeStamp-connectStamp) 
                     + " ms  Read: " + (readStamp-writeStamp) + " ms" ;
@@ -111,6 +111,5 @@ public class Invoke_HTTP_Post {
     int n = ihp.action(myurl, arr_a);
     long stop = System.currentTimeMillis();
     System.out.println("Invoke_HTTP_Post (main): sendt to " + myurl + " " + n + " took: " + (stop - start) + "ms");
-    };
-
+    }
 }

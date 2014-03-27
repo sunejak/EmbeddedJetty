@@ -110,7 +110,7 @@ public class Receive_Token extends HttpServlet {
         + " sendt: "   + new Date(sendt)    + " " + sendt
         + " created: " + new Date(created)  + " " + created 
         );
-        Token_Store.getInstance(false).setNodeList(new Long(created), myArr); // save a copy of the Token in the Token_Store}
+        Token_Store.getInstance(false).setNodeList(created, myArr); // save a copy of the Token in the Token_Store}
         
         }
     }

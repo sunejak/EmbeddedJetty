@@ -17,7 +17,7 @@ public class MonitoringResponseFilter implements ContainerResponseFilter {
     private static final Logger LOGGER = Logger.getLogger(MonitoringResponseFilter.class.getName());
     private static final MonitoringResponseFilter mf = new MonitoringResponseFilter();
 
-    private static Integer[] cnt = new Integer[Response.Status.values().length];
+    private static final Integer[] cnt = new Integer[Response.Status.values().length];
 
     public static MonitoringResponseFilter getInstance(){
         return mf;
@@ -33,16 +33,14 @@ public class MonitoringResponseFilter implements ContainerResponseFilter {
         if (response.getStatus() < (Response.Status.MOVED_PERMANENTLY.getStatusCode()-2) && response.getStatus() >= Response.Status.OK.getStatusCode()) {
 
             Response.Status[] responseStatus = Response.Status.values();
-            for ( int x = 0; x < Response.Status.values().length ; x++){
-                if(responseStatus[x].getStatusCode() == response.getStatus()){
-                    synchronized (cnt){
-
-                        if(cnt[x] == null)cnt[x] = new Integer(0);
+            for ( int x = 0; x < Response.Status.values().length ; x++)
+                if (responseStatus[x].getStatusCode() == response.getStatus()) {
+                    synchronized (cnt) {
+                        if (cnt[x] == null) cnt[x] = 0;
                         cnt[x]++;
                     }
                     break;
                 }
-            }
         }
         LOGGER.log(Level.FINEST, response.getStatusType().toString());
         return response;

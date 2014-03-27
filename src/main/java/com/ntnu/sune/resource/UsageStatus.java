@@ -43,10 +43,10 @@ public class UsageStatus {
 
             for (int x = 0; x < count.length; x++){
 
-                if(count[x] != null)text.append(responseStatus[x].toString()).append(" : ").append(count[x].toString());
+                if(count[x] != null)text.append(responseStatus[x].toString()).append(" : ").append(count[x].toString()).append("\n");
             }
 
-            return Response.status(Response.Status.OK).entity(text.toString()).build();
+            return Response.status(Response.Status.CREATED).entity(text.toString()).build();
         }
         return null;
     }

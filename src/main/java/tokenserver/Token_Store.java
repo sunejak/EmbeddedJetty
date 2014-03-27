@@ -7,11 +7,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class Token_Store {
-    // These fields help us see whether one or
-    // more Singletons were created. There is usually
-    // no need for them in a Singleton.
-    private int instanceNumber;
-    private Date creationDate;
     private java.util.Hashtable node_list;
     private java.util.Hashtable timestamp;
     private String[] errors;
@@ -32,10 +27,10 @@ public class Token_Store {
     * outside objects from constructing more instances.
     */
     private Token_Store(boolean main) {
-    	
-        instanceNumber = ++numberOfInstances;
+
+        int instanceNumber = ++numberOfInstances;
         Calendar now = Calendar.getInstance();
-        creationDate = now.getTime();
+        Date creationDate = now.getTime();
         node_list = new java.util.Hashtable();
         timestamp = new java.util.Hashtable();
         long total_mem = Runtime.getRuntime().totalMemory();
@@ -97,8 +92,7 @@ public class Token_Store {
     */
 
     public String[] getNodeList(Long key) {
-        String[] n = (String[])node_list.get(key);
-        return n;
+        return (String[])node_list.get(key);
     }
     
     public int getCounterFromList(Long key) {
@@ -129,7 +123,7 @@ public class Token_Store {
 	public long getNodeTime(Long key) {
 		Long m = (Long)timestamp.get(key);
 		
-		if(m != null)return m.longValue(); else return -1L;
+		if(m != null)return m; else return -1L;
 	}
 	
 	public void clearAllNodeKeys() {
@@ -144,7 +138,7 @@ public class Token_Store {
 	public void setError(String err){
 		
 		if(errors_p >= errors.length)errors_p = 0;
-		errors[errors_p++] = new String(err);
+		errors[errors_p++] = err;
 	}
 	
 	public String[] getErrors() {
@@ -163,7 +157,7 @@ public class Token_Store {
 //        boolean debug = debug_in.equalsIgnoreCase("true");
         Token_Store mtts = Token_Store.getInstance(true);
 
-        Long now = new Long(new Date().getTime());
+        Long now = new Date().getTime();
         
         String[] arr_a = new String[args.length + 2];
         
@@ -221,7 +215,7 @@ public class Token_Store {
                 	
                 	if (last_stamp > 0L){ 
                 		txt = "Failed";
-                		setNodeTime(tmp[x], new Long(-1L)); // to show Failed once
+                		setNodeTime(tmp[x], -1L); // to show Failed once
                 	}
                 	
                 	else txt = "Dismissed";
@@ -259,9 +253,9 @@ public class Token_Store {
                     String[] tmparr = (String[])node_list.get(tmp[x]);
                     
                     String[] copied = new String[tmparr.length];
-                    for (int x1 = 0; x1<tmparr.length;x1++)copied[x1] = new String(tmparr[x1]);
+                    for (int x1 = 0; x1<tmparr.length;x1++)copied[x1] = tmparr[x1];
 
-                    Long now = new Long(new Date().getTime());
+                    Long now = new Date().getTime();
 
                     String[] harr = copied[0].split(" ");
                     int counter = Integer.parseInt(harr[4]);

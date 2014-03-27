@@ -25,15 +25,19 @@ public class DumpServletA extends HttpServlet
         response.getWriter().println("session=" + request.getSession(true).getId());
 
         String r=request.getParameter("resource");
-        if (r!=null)
-            response.getWriter().println("resource("+r+")=" + getServletContext().getResource(r));
-
+        if (r!=null) {
+            r = r.replace("&", "&and;");
+            r = r.replace("<", "&lt;");
+            r = r.replace(">", "&gt;");
+            response.getWriter().println("resource(" + r + ")=" + getServletContext().getResource(r));
+        }
         response.getWriter().println("authType=" + request.getAuthType());
 
         response.getWriter().println("Free=" + Runtime.getRuntime().freeMemory());
         response.getWriter().println("Max=" + Runtime.getRuntime().maxMemory());
         response.getWriter().println("Total=" + Runtime.getRuntime().totalMemory());
         response.getWriter().println("count=" + cnt);
+        //noinspection SynchronizeOnNonFinalField
         synchronized (cnt) {
             cnt++;
         }
