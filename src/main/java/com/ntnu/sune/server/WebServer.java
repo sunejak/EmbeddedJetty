@@ -36,11 +36,18 @@ public class WebServer {
 
         Server server = new Server();
 
-        ServerConnector serverConnector = new ServerConnector(server);
-        serverConnector.setHost(name);
-        serverConnector.setPort(port);
-        serverConnector.setIdleTimeout(30000L);
-        server.addConnector(serverConnector);
+        ServerConnector serverConnector0 = new ServerConnector(server);
+        serverConnector0.setHost(name);
+        serverConnector0.setPort(port);
+        serverConnector0.setIdleTimeout(30000L);
+
+        ServerConnector serverConnector1 = new ServerConnector(server);
+        serverConnector1.setHost("127.0.0.1");
+        serverConnector1.setPort(port+1);
+        serverConnector1.setIdleTimeout(30000L);
+
+        server.addConnector(serverConnector0);
+        server.addConnector(serverConnector1);
 
         // use a jersey based servlet
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
