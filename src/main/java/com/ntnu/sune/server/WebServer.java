@@ -37,17 +37,10 @@ public class WebServer {
         Server server = new Server();
 
         ServerConnector serverConnector0 = new ServerConnector(server);
-        serverConnector0.setHost(name);
         serverConnector0.setPort(port);
         serverConnector0.setIdleTimeout(30000L);
 
-        ServerConnector serverConnector1 = new ServerConnector(server);
-        serverConnector1.setHost("127.0.0.1");
-        serverConnector1.setPort(port+1);
-        serverConnector1.setIdleTimeout(30000L);
-
         server.addConnector(serverConnector0);
-        server.addConnector(serverConnector1);
 
         // use a jersey based servlet
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -66,6 +59,9 @@ public class WebServer {
         // TODO remove? servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
         servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/Receive_Token");
+        // add virtual hosts as well
+        String[] hosts = {name, "localhost", "127.0.0.1"};
+        servletContextHandler.addVirtualHosts(hosts);
 
         // add security handler
         // servletContextHandler.setSecurityHandler(basicAuth("demo", "hello", "private"));
@@ -78,14 +74,14 @@ public class WebServer {
         requestLog.setRetainDays(90);
         requestLog.setAppend(true);
         requestLog.setExtended(false);
-        requestLog.setLogTimeZone("GMT");
+        requestLog.setLogTimeZone("GMT+1");
         requestLogHandler.setRequestLog(requestLog);
         // fix all the handlers
         HandlerCollection handlers = new HandlerCollection();
         handlers.setHandlers(new Handler[]{servletContextHandler, new DefaultHandler(), requestLogHandler});
         server.setHandler(handlers);
 
-        System.out.println("Starting " + WebServer.class.getName() + " on port: " + port);
+        System.out.println("Starting " + name + " on port: " + port);
         try {
 
         server.start();
