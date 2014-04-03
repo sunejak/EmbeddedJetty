@@ -29,14 +29,16 @@ public class WebServer {
 
     public WebServer() {
 
-        new WebServer("localhost" , 8089);
+        String[] hosts = {"localhost"};
+        new WebServer(8085, hosts);
     }
 
-    public WebServer(String name, int port)  {
+    public WebServer(int port, String[] hosts)  {
 
         Server server = new Server();
 
         ServerConnector serverConnector0 = new ServerConnector(server);
+        // serverConnector0.setHost(name);
         serverConnector0.setPort(port);
         serverConnector0.setIdleTimeout(30000L);
 
@@ -60,8 +62,13 @@ public class WebServer {
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
         servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/Receive_Token");
         // add virtual hosts as well
-        String[] hosts = {name, "localhost", "127.0.0.1"};
-        servletContextHandler.addVirtualHosts(hosts);
+        String[] hostNames = new String[hosts.length-1];
+        StringBuilder names = new StringBuilder();
+        for ( int x = 0 ; x < hosts.length-1 ; x++){
+            hostNames[x] =  hosts[x+1];
+            names.append(hostNames[x]).append(" ");
+        }
+        servletContextHandler.addVirtualHosts(hostNames);
 
         // add security handler
         // servletContextHandler.setSecurityHandler(basicAuth("demo", "hello", "private"));
@@ -81,7 +88,7 @@ public class WebServer {
         handlers.setHandlers(new Handler[]{servletContextHandler, new DefaultHandler(), requestLogHandler});
         server.setHandler(handlers);
 
-        System.out.println("Starting " + name + " on port: " + port);
+        System.out.println("Starting " + names.toString() + " on port: " + port);
         try {
 
         server.start();
@@ -120,9 +127,8 @@ public class WebServer {
 
         try {
         if(args.length > 0){
-            String name = args[0];
-            int port = Integer.parseInt(args[1].trim());
-            new WebServer(name, port);
+            int port = Integer.parseInt(args[0].trim());
+            new WebServer(port, args);
         } else {
             new WebServer();
         }
