@@ -13,7 +13,7 @@ public class Invoke_HTTP_Get {
 
     long max_time = 5000;
 
-    String action(String url, int test, int cnt) {
+    String action(String url, int test, int cnt, int index) {
 
         long entryStamp = System.currentTimeMillis();
         long readStamp;
@@ -25,7 +25,7 @@ public class Invoke_HTTP_Get {
         String txt = null;
 
         try {
-            URL invoke = new URL(url + "?cnt=" + cnt);
+            URL invoke = new URL(url + "?cnt=" + cnt + "&index=" + index + "&time=" + entryStamp);
             address = InetAddress.getByName(invoke.getHost());
             HttpURLConnection connection = (HttpURLConnection) invoke.openConnection();
             connection.setDoOutput(true);
@@ -78,7 +78,7 @@ public class Invoke_HTTP_Get {
         }
         System.out.println("Invoke_HTTP_Get(main): invoking " + args[0]);
         int m = 0;
-        String n = ihp.action(args[0], 3, m);
+        String n = ihp.action(args[0], 3, m, 0);
         long stop = System.currentTimeMillis();
         System.out.println("Invoke_HTTP_Get(main): sent to " + args[0] + " " + n + " took: " + (stop - start) + "ms");
     }

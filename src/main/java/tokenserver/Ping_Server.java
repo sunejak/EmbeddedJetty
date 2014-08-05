@@ -1,5 +1,6 @@
 package tokenserver;
 
+import java.io.IOException;
 import java.lang.Thread.State;
 import java.util.Calendar;
 
@@ -17,18 +18,18 @@ public class Ping_Server {
             System.out.println("No URLs to work with, exiting");
             System.exit(-1);
         }
-        int cnt = 0;
-        int m = 0;
+        int threadIndex = 0;
+        int loopNumber = 0;
 
         SimpleThread[] nt = new SimpleThread[args.length*5]; // create a set of threads for each URL
 
         for(int ii=0; ii<args.length; ii++){
 
-            nt[ii] = new SimpleThread(args[ii], 0);
-            nt[ii+(args.length)] = new SimpleThread(args[ii], 0);
-            nt[ii+(args.length*2)] = new SimpleThread(args[ii], 0);
-            nt[ii+(args.length*3)] = new SimpleThread(args[ii], 0);
-            nt[ii+(args.length*4)] = new SimpleThread(args[ii], 0);
+            nt[ii] = new SimpleThread(args[ii], 0, 0);
+            nt[ii+(args.length)] = new SimpleThread(args[ii], 0, 0);
+            nt[ii+(args.length*2)] = new SimpleThread(args[ii], 0, 0);
+            nt[ii+(args.length*3)] = new SimpleThread(args[ii], 0, 0);
+            nt[ii+(args.length*4)] = new SimpleThread(args[ii], 0, 0);
         }
 
         Calendar cal = Calendar.getInstance();
@@ -38,24 +39,23 @@ public class Ping_Server {
             long now = System.currentTimeMillis();
 
             try {
-                State state = nt[cnt].getState();
-                System.out.println("Ping_Server: Thread ("  + cnt + ") state is: " + state.toString());
+                State state = nt[threadIndex].getState();
+                System.out.println("Ping_Server: Thread ("  + threadIndex + ") state is: " + state.toString());
 
-                if(nt[cnt].getState().equals(State.TERMINATED)){
-                    String who = nt[cnt].getName();
+                if(nt[threadIndex].getState().equals(State.TERMINATED)){
+                    String who = nt[threadIndex].getName();
 //					System.out.println("Ping_Server: Thread is TERMINATED,  start over: " + nt[cnt].getState());
-                    nt[cnt] = new SimpleThread(who, m);
-                    nt[cnt].start();
+                    nt[threadIndex] = new SimpleThread(who, threadIndex, loopNumber);
+                    nt[threadIndex].start();
                 }
-                if(nt[cnt].getState().equals(State.NEW)){
+                if(nt[threadIndex].getState().equals(State.NEW)){
 //					System.out.println("Ping_Server: Thread is NEW,  start over: " + nt[cnt].getState());
-                    nt[cnt].numb = m;
-                    nt[cnt].start();
+                    nt[threadIndex].number = loopNumber;
+                    nt[threadIndex].start();
 
                 }
             } catch (Exception e1) {
-                // TODO Auto-generated catch block
-                System.out.println("Ping_Server: failed to start: " + cnt + " " + e1.getMessage());
+                System.out.println("Ping_Server: thread failed to start: " + threadIndex + " " + e1.getMessage());
             }
 
             try {
@@ -65,9 +65,12 @@ public class Ping_Server {
                 e.printStackTrace();
             }
             long after = System.currentTimeMillis();
-            System.out.println("Ping_Server: " + (after-now) + " ms loop nr: " + m + " " + cal.getTime());
-            cnt++; if(cnt>=args.length*5)cnt=0;
-            m++;
+            System.out.println("Ping_Server: " + (after-now) + " ms loop nr: " + loopNumber + " " + cal.getTime());
+            // allow 5 ms margin here
+            if((after-now) > ((interval/args.length)+5))System.out.println("Ping_Server: thread had time issue");
+            threadIndex++;
+            if(threadIndex>=args.length*5)threadIndex=0;
+            loopNumber++;
         }
     }
 }
