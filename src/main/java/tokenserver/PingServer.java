@@ -1,10 +1,9 @@
 package tokenserver;
 
-import java.io.IOException;
 import java.lang.Thread.State;
 import java.util.Calendar;
 
-public class Ping_Server {
+public class PingServer {
 
     public static final int interval = 2500;
 
@@ -13,7 +12,7 @@ public class Ping_Server {
      */
     public static void main(String[] args) {
 
-        System.out.println("Ping_Server (main) is starting (" + args.length + ")");
+        System.out.println("PingServer (main) is starting (" + args.length + ")");
         if(args.length < 1){
             System.out.println("No URLs to work with, exiting");
             System.exit(-1);
@@ -40,22 +39,19 @@ public class Ping_Server {
 
             try {
                 State state = nt[threadIndex].getState();
-                System.out.println("Ping_Server: Thread ("  + threadIndex + ") state is: " + state.toString());
+                System.out.println("PingServer: Thread ("  + threadIndex + ") state is: " + state.toString());
 
                 if(nt[threadIndex].getState().equals(State.TERMINATED)){
                     String who = nt[threadIndex].getName();
-//					System.out.println("Ping_Server: Thread is TERMINATED,  start over: " + nt[cnt].getState());
                     nt[threadIndex] = new SimpleThread(who, threadIndex, loopNumber);
                     nt[threadIndex].start();
                 }
                 if(nt[threadIndex].getState().equals(State.NEW)){
-//					System.out.println("Ping_Server: Thread is NEW,  start over: " + nt[cnt].getState());
                     nt[threadIndex].number = loopNumber;
                     nt[threadIndex].start();
-
                 }
             } catch (Exception e1) {
-                System.out.println("Ping_Server: thread failed to start: " + threadIndex + " " + e1.getMessage());
+                System.out.println("PingServer: thread failed to start: " + threadIndex + " " + e1.getMessage());
             }
 
             try {
@@ -65,9 +61,9 @@ public class Ping_Server {
                 e.printStackTrace();
             }
             long after = System.currentTimeMillis();
-            System.out.println("Ping_Server: " + (after-now) + " ms loop nr: " + loopNumber + " " + cal.getTime());
+            System.out.println("PingServer: " + (after-now) + " ms loop nr: " + loopNumber + " " + cal.getTime());
             // allow 5 ms margin here
-            if((after-now) > ((interval/args.length)+5))System.out.println("Ping_Server: thread had time issue");
+            if((after-now) > ((interval/args.length)+5))System.out.println("PingServer: thread had time issue");
             threadIndex++;
             if(threadIndex>=args.length*5)threadIndex=0;
             loopNumber++;

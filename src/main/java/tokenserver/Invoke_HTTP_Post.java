@@ -18,9 +18,9 @@ public class Invoke_HTTP_Post {
         long entryStamp = System.currentTimeMillis();
         int pretxt = System.identityHashCode(this);
         Calendar last_known = Calendar.getInstance();
-        HttpURLConnection connection = null;
+        HttpURLConnection connection;
         int code = -1;
-        URL invoke = null;
+        URL invoke;
         InetAddress address = null;
         
         try {
@@ -65,20 +65,20 @@ public class Invoke_HTTP_Post {
      
         if(code != 200){ String m = "Invoke_HTTP_Post (" + pretxt + "): Response code from: " 
         		+ url + " (" + address + ") is " + code + " " + msg + " " + arr[0] + " " + last_known.getTime(); 
-        		Token_Store.getInstance(false).setError(m);
+        		TokenStore.getInstance(false).setError(m);
         		System.out.println(m);
         }
         
                 } catch (MalformedURLException e) {
                     String m = "Invoke_HTTP_Post (" + pretxt + "): MalformedURLException " + e.getMessage() + " to: " 
                     		+ url+ " (" + address + ") " + arr[0] + " " + last_known.getTime(); 
-                    Token_Store.getInstance(false).setError(m);
+                    TokenStore.getInstance(false).setError(m);
                     System.out.println(m); 
 //                                e.printStackTrace();
                 } catch (IOException e) {
                     String m = "Invoke_HTTP_Post (" + pretxt + "): IOException " + e.getMessage() + " to: " 
                     		+ url + " (" + address + ") " + arr[0] + " " + last_known.getTime(); 
-                    Token_Store.getInstance(false).setError(m);
+                    TokenStore.getInstance(false).setError(m);
                     System.out.println(m);
 //                                e.printStackTrace();
                 } 

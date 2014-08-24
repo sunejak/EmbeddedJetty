@@ -6,7 +6,7 @@ import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Token_Store {
+public class TokenStore {
     private java.util.Hashtable node_list;
     private java.util.Hashtable timestamp;
     private String[] errors;
@@ -20,13 +20,13 @@ public class Token_Store {
     // You could add = new SingletonX() at the end of the
     // next line for simple non-lazy initialisation,
     // instead of doing lazy initialisation in getInstance()
-    private static Token_Store instance;
+    private static TokenStore instance;
 
     /**
     * Note that the constructor is private, to prevent
     * outside objects from constructing more instances.
     */
-    private Token_Store(boolean main) {
+    private TokenStore(boolean main) {
 
         int instanceNumber = ++numberOfInstances;
         Calendar now = Calendar.getInstance();
@@ -37,17 +37,17 @@ public class Token_Store {
         errors = new String[10];
         errors_p = 0;
         
-        System.out.println("Token_Store is created (" + instanceNumber + ") " + creationDate + " (" + total_mem + ")bytes " + main);
+        System.out.println("TokenStore is created (" + instanceNumber + ") " + creationDate + " (" + total_mem + ")bytes " + main);
         
         if(main){
         	// create a task that keeps sending tokens.
         	Timer timer = new Timer();
         	now.set(Calendar.SECOND, 0);
-        	TimerTask n = new Token_Store.SendToken();
+        	TimerTask n = new TokenStore.SendToken();
         	try {
         		Thread.sleep(500);
         	} catch (InterruptedException e) {
-        		System.out.println("Failed in SendToken");
+        		System.out.println("Failed in TokenStore");
         	}
         	timer.scheduleAtFixedRate(n, now.getTime(), interval); // send tokens at 30 second interval
         }
@@ -55,11 +55,11 @@ public class Token_Store {
             // create a task that keeps checking tokens.
             Timer timer = new Timer();
             now.set(Calendar.SECOND, 0);
-            TimerTask n = new Token_Store.CheckToken();
+            TimerTask n = new TokenStore.CheckToken();
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
-        		System.out.println("Failed in CheckToken");
+        		System.out.println("Check failed in TokenStore");
             }
             timer.scheduleAtFixedRate(n, now.getTime(), 10*interval); // check tokens at 300 second interval
         }  
@@ -70,10 +70,10 @@ public class Token_Store {
   * point of access through the class name. There are
   * other ways to implement the Singleton.
   */
-    public static Token_Store getInstance(boolean main) {
+    public static TokenStore getInstance(boolean main) {
         if (instance == null) {
-            System.out.println("Token_Store does not exist (" + main + ") creating version: " + version);
-            instance = new Token_Store(main);
+            System.out.println("TokenStore does not exist (" + main + ") creating version: " + version);
+            instance = new TokenStore(main);
         }
         return instance;
     }
@@ -97,8 +97,8 @@ public class Token_Store {
     
     public int getCounterFromList(Long key) {
         String[] n = (String[])node_list.get(key);
-        String[] newarr = n[0].split(" ");     
-        return Integer.parseInt(newarr[4]);
+        String[] newArr = n[0].split(" ");
+        return Integer.parseInt(newArr[4]);
     }
 
     public void setNodeList(Long created, String[] n) {
@@ -147,15 +147,12 @@ public class Token_Store {
 
     public static void main(String[] args) {
 
-//        String debug_in = args.length > 0 ? args[0] : "false";
-        
-        System.out.println("Token_Store (main) is starting (" + args.length + ")");
+        System.out.println("TokenStore (main) is starting (" + args.length + ")");
         if(args.length < 2){
         	System.out.println("No URLs to work with, exiting");
         	System.exit(-1);
         }
-//        boolean debug = debug_in.equalsIgnoreCase("true");
-        Token_Store mtts = Token_Store.getInstance(true);
+        TokenStore mtts = TokenStore.getInstance(true);
 
         Long now = new Date().getTime();
         
@@ -166,36 +163,16 @@ public class Token_Store {
               
         for (int x=2; x < (args.length + 2) ; x++)arr_a[x] = args[x-2];
         System.out.println("First node to access is: " + arr_a[3]);
-       
-//        String[] arr_a =       	
-//        { 
-//        		"Token created: " + now + " counter: 0 dispatched: " + now, 
-//        		"3", 
-//        		"http://sune-ws.no-ip.org/tokenserver/Receive_Token",
-//        		"http://reidun.no-ip.com/tokenserver/Echo_Token",
-//        		"http://bjarne.pats.no:8090/tokenserver/Echo_Token",
-//        		"http://129.241.200.85:8180/tokenserver/Echo_Token"
-//         };  	
-        
-//        if(debug){
-//        	
-//        	arr_a = new String[3];
-//        	arr_a[0] = "Token created: " + now + " counter: 0 dispatched: " + now;
-//        	arr_a[1] = "1";
-//        	arr_a[2] = "http://localhost:8080/TokenServer/Receive_Token";
-//        	arr_a[3] = "http://localhost:8080/TokenServer/Echo_Token";	
-//        }
-        
         mtts.setNodeList(now, arr_a);
-        System.out.println("Token_Store (" + version + ")(main) is done");
+        System.out.println("TokenStore (" + version + ")(main) is done");
     }
 
     private class CheckToken extends TimerTask {
 
         public void run() {
             Calendar rightNow = Calendar.getInstance();
-            int pretxt = System.identityHashCode(this);
-            System.out.println("CheckToken: Time's up! (" + pretxt + ") " + rightNow.getTime().toString());
+            int preTxt = System.identityHashCode(this);
+            System.out.println("CheckToken: Time's up! (" + preTxt + ") " + rightNow.getTime().toString());
 
             Enumeration en = node_list.keys();
             Long[] tmp = new Long[node_list.size()];
@@ -203,30 +180,26 @@ public class Token_Store {
             while (en.hasMoreElements()) {
                 tmp[zz++] = (Long)en.nextElement();
             }  
-            if (tmp.length > 0)
+            if (tmp.length > 0) {
                 for (int x = 0; x < tmp.length; x++) {
-                	
-                	long last_stamp = getNodeTime(tmp[x]);
-                	String txt = "";
-                	
-                	long delta = System.currentTimeMillis() - last_stamp;
-                	
-                	if (delta > ( 30*interval )){
-                	
-                	if (last_stamp > 0L){ 
-                		txt = "Failed";
-                		setNodeTime(tmp[x], -1L); // to show Failed once
-                	}
-                	
-                	else txt = "Dismissed";
-                	
-                	System.out.println("CheckToken: (" + pretxt 
-                    		+ ") Token_Store contains: [" + x + "] " + tmp[x] 
-                    		+ " : " + getCounterFromList(tmp[x])
-                    		+ " : " + delta + " ms " + txt
-                    		);
-                	}
+                    long last_stamp = getNodeTime(tmp[x]);
+                    String txt;
+                    long delta = System.currentTimeMillis() - last_stamp;
+                    if (delta > (30 * interval)) {
+                        if (last_stamp > 0L) {
+                            txt = "Failed";
+                            setNodeTime(tmp[x], -1L); // to show Failed once
+                        } else {
+                            txt = "Dismissed";
+                        }
+                        System.out.println("CheckToken: (" + preTxt
+                                + ") TokenStore contains: [" + x + "] " + tmp[x]
+                                + " : " + getCounterFromList(tmp[x])
+                                + " : " + delta + " ms " + txt
+                        );
+                    }
                 }
+            }
         	}
         }
 
@@ -249,7 +222,7 @@ public class Token_Store {
             if (tmp.length > 0)
                 for (int x = 0; x < tmp.length; x++) {
 
-                    System.out.println("SendToken: (" + pretxt + ") Token_Store contains: [" + x + "] " + tmp[x]);
+                    System.out.println("SendToken: (" + pretxt + ") TokenStore contains: [" + x + "] " + tmp[x]);
                     String[] tmparr = (String[])node_list.get(tmp[x]);
                     
                     String[] copied = new String[tmparr.length];
@@ -302,10 +275,9 @@ public class Token_Store {
             int i = new Invoke_HTTP_Post().action(myurl, tmparr);
             long timeItTook = System.currentTimeMillis() - start;
             String status = timeItTook > interval ? " and a token got skipped" : "";
-            System.out.println("WorkThread: Round: " + cnt + " " + new Date() + 
-                               " " + free_mem + " bytes Got: " + i + 
-                               " when token was sendt to: " + myurl + 
-                               " and it took: " + timeItTook + " ms " + status);
+            System.out.println("WorkThread: Round: " + cnt + " " + new Date() + " " + free_mem
+                    + " bytes Got: " + i + " when token was sent to: " + myurl + " and it took: "
+                    + timeItTook + " ms " + status);
         }
     }
 }

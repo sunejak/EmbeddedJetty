@@ -21,7 +21,7 @@ import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.util.security.Constraint;
 import org.eclipse.jetty.util.security.Credential;
 
-import tokenserver.Receive_Token;
+import tokenserver.ReceiveToken;
 
 // http://localhost:8089/jax/application.wadl
 
@@ -37,12 +37,13 @@ public class WebServer {
 
         Server server = new Server();
 
+        for ( int x = 0 ; x < hosts.length-1 ; x++){
         ServerConnector serverConnector0 = new ServerConnector(server);
-        // serverConnector0.setHost(name);
+        serverConnector0.setHost(hosts[x+1]);
         serverConnector0.setPort(port);
         serverConnector0.setIdleTimeout(30000L);
-
         server.addConnector(serverConnector0);
+        }
 
         // use a jersey based servlet
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
@@ -60,7 +61,7 @@ public class WebServer {
         servletContextHandler.addServlet(servletHolder, "/jax/*");
         // TODO remove? servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
-        servletContextHandler.addServlet(new ServletHolder(new Receive_Token()), "/token/Receive_Token");
+        servletContextHandler.addServlet(new ServletHolder(new ReceiveToken()), "/token/ReceiveToken");
         // add virtual hosts as well
         String[] hostNames = new String[hosts.length-1];
         StringBuilder names = new StringBuilder();
