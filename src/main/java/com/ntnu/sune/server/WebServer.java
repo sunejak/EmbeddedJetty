@@ -23,18 +23,23 @@ import org.eclipse.jetty.util.security.Credential;
 
 import tokenserver.ReceiveToken;
 
-// http://localhost:8089/jax/application.wadl
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+// http://localhost:8085/jax/application.wadl
 
 public class WebServer {
 
-    public WebServer() {
+    private static final Logger LOGGER = Logger.getLogger(WebServer.class.getName());
 
+    public WebServer() {
         String[] hosts = {"localhost"};
         new WebServer(8085, hosts);
     }
 
     public WebServer(int port, String[] hosts)  {
 
+        LOGGER.log(Level.INFO, "Starting WebServer");
         Server server = new Server();
 
         for ( int x = 0 ; x < hosts.length-1 ; x++){
@@ -89,13 +94,13 @@ public class WebServer {
         handlers.setHandlers(new Handler[]{servletContextHandler, new DefaultHandler(), requestLogHandler});
         server.setHandler(handlers);
 
-        System.out.println("Starting " + names.toString() + " on port: " + port);
+        LOGGER.log(Level.INFO, "Starting WebServer at " + names.toString() + " using port: " + port + " version: 24 Aug 2014");
         try {
 
         server.start();
         server.join();
         } catch (Exception e){
-            System.out.println("Failed " + WebServer.class.getName() + " on port: " + port);
+            LOGGER.log(Level.SEVERE, "Failed on port: " + port, e);
             System.exit(1);
         }
     }
@@ -117,7 +122,7 @@ public class WebServer {
 
         ConstraintSecurityHandler constraintSecurityHandler = new ConstraintSecurityHandler();
         constraintSecurityHandler.setAuthenticator(new BasicAuthenticator());
-        constraintSecurityHandler.setRealmName("myrealm");
+        constraintSecurityHandler.setRealmName("myRealm");
         constraintSecurityHandler.addConstraintMapping(constraintMapping);
         constraintSecurityHandler.setLoginService(hashLoginService);
 
@@ -135,7 +140,7 @@ public class WebServer {
         }
         }
         catch (Exception e){
-            System.out.println("Failed...");
+            LOGGER.log(Level.SEVERE, "Failed...", e);
             e.printStackTrace();
         }
     }
