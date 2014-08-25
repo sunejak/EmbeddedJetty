@@ -86,7 +86,7 @@ public class WebServer {
         NCSARequestLog requestLog = new NCSARequestLog("./logs/jetty-yyyy_mm_dd.log");
         requestLog.setRetainDays(90);
         requestLog.setAppend(true);
-        requestLog.setExtended(false);
+        requestLog.setExtended(true);
         requestLog.setLogTimeZone("GMT+1");
         requestLogHandler.setRequestLog(requestLog);
         // fix all the handlers

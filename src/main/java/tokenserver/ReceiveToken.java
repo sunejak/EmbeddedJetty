@@ -31,7 +31,8 @@ public class ReceiveToken extends HttpServlet {
         String destAddr = request.getRemoteHost();
 //         int destPort = request.getRemotePort();
         String myque = request.getQueryString();
-        if(debug)System.out.println("Receive_Token Accepted GET connection from " + destName + " (" + destAddr + ") QueryString: " + myque); // + " on port " + destPort);
+        if(debug)System.out.println("ReceiveToken Accepted GET connection from " + destName + " (" + destAddr + ") "
+                + Calendar.getInstance().getTime() + " QueryString: " + myque); // + " on port " + destPort);
 
         out.println("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">");
         out.println("<html><head>");
@@ -40,7 +41,7 @@ public class ReceiveToken extends HttpServlet {
         out.println("<body>");
 
         long free_mem = Runtime.getRuntime().freeMemory();
-        out.println("Receive_Token GET " + free_mem + " " + Calendar.getInstance().getTime());
+        out.println("ReceiveToken GET " + free_mem + " " + Calendar.getInstance().getTime());
         out.println("</body></html>");
         out.close();
     }
