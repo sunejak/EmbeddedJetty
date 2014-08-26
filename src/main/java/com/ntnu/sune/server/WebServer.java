@@ -94,7 +94,7 @@ public class WebServer {
         handlers.setHandlers(new Handler[]{servletContextHandler, new DefaultHandler(), requestLogHandler});
         server.setHandler(handlers);
 
-        LOGGER.log(Level.INFO, "Starting WebServer at " + names.toString() + " using port: " + port + " version: 24 Aug 2014");
+        LOGGER.log(Level.INFO, "WebServer started at " + names.toString() + " using port: " + port + " version: 24 Aug 2014");
         try {
 
         server.start();

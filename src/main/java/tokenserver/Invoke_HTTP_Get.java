@@ -33,7 +33,7 @@ public class Invoke_HTTP_Get {
             String response;
             while ((response = in.readLine()) != null ) {
                 if(test > 5)System.out.println("Invoke_HTTP_Get: " + response);
-                if(response.startsWith("Receive_Token"))txt = response;
+                if(response.startsWith("ReceiveToken"))txt = response;
             }
             in.close();
             connection.disconnect();
