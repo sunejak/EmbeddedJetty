@@ -11,8 +11,10 @@ fi
 
 timezone=$2
 if [[ ${timezone} == "" ]] ; then
-    timezone=GMT
-    echo "Setting timezone to $timezone"
+
+    # extract timezone from logfile
+    timezone=`tail -10 ${logfile} | grep Invoke | sed "s:  : :g" | cut -d " " -f15 | tail -1`
+    echo "Setting timezone to $timezone found from ${logfile}"
 fi
 
 #
