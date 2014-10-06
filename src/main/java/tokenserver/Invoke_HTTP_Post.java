@@ -8,8 +8,12 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Invoke_HTTP_Post {
+
+    private static final Logger LOGGER = Logger.getLogger(Invoke_HTTP_Post.class.getName());
 
     Invoke_HTTP_Post() { }
 
@@ -52,7 +56,7 @@ public class Invoke_HTTP_Post {
                     + " Connect: " + (connectStamp-entryStamp)
                     + " ms  Write: " + (writeStamp-connectStamp)
                     + " ms  Read: " + (readStamp-writeStamp) + " ms" ;
-                System.out.println(m);
+                LOGGER.log(Level.INFO,m);
             }
 
             String msg = connection.getResponseMessage();
@@ -63,20 +67,20 @@ public class Invoke_HTTP_Post {
             if(code != 200){ String m = "Invoke_HTTP_Post (" + preTxt + "): Response code from: "
                     + url + " (" + address + ") is " + code + " " + msg + " " + arr[0] + " " + last_known.getTime();
                 TokenStore.getInstance(false).setError(m);
-                System.out.println(m);
+                LOGGER.log(Level.INFO,m);
             }
 
         } catch (MalformedURLException e) {
             String m = "Invoke_HTTP_Post (" + preTxt + "): MalformedURLException " + e.getMessage() + " to: "
                     + url+ " (" + address + ") " + arr[0] + " " + last_known.getTime();
             TokenStore.getInstance(false).setError(m);
-            System.out.println(m);
+            LOGGER.log(Level.INFO,m);
 //                                e.printStackTrace();
         } catch (IOException e) {
             String m = "Invoke_HTTP_Post (" + preTxt + "): IOException " + e.getMessage() + " to: "
                     + url + " (" + address + ") " + arr[0] + " " + last_known.getTime();
             TokenStore.getInstance(false).setError(m);
-            System.out.println(m);
+            LOGGER.log(Level.INFO,m);
 //                                e.printStackTrace();
         }
         return code;
@@ -107,6 +111,6 @@ public class Invoke_HTTP_Post {
         System.out.println("Invoke_HTTP_Post (main): invoking " + myurl);
         int n = ihp.action(myurl, arr_a);
         long stop = System.currentTimeMillis();
-        System.out.println("Invoke_HTTP_Post (main): sendt to " + myurl + " " + n + " took: " + (stop - start) + "ms");
+        System.out.println("Invoke_HTTP_Post (main): sent to " + myurl + " " + n + " took: " + (stop - start) + "ms");
     }
 }

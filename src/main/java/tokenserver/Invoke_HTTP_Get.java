@@ -8,9 +8,12 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Invoke_HTTP_Get {
 
+    private static final Logger LOGGER = Logger.getLogger(PingServer.class.getName());
     long max_time = 5000;
 
     String action(String url, int test, int cnt, int index) {
@@ -32,14 +35,14 @@ public class Invoke_HTTP_Get {
             BufferedReader in =  new BufferedReader( new InputStreamReader( connection.getInputStream(), "UTF-8" ) );
             String response;
             while ((response = in.readLine()) != null ) {
-                if(test > 5)System.out.println("Invoke_HTTP_Get: " + response);
+                if(test > 5)LOGGER.log(Level.INFO, "Invoke_HTTP_Get: " + response);
                 if(response.startsWith("ReceiveToken"))txt = response;
             }
             in.close();
             connection.disconnect();
             readStamp = System.currentTimeMillis();
             if((readStamp - entryStamp) > max_time){  m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Time_issue_with: " + " Connect: " + (readStamp-entryStamp) ;
-                if(test > 3)System.out.println(m);
+                if(test > 3)LOGGER.log(Level.INFO, m);
             }
 
             code = connection.getResponseCode();
@@ -50,20 +53,20 @@ public class Invoke_HTTP_Get {
                         + code + " " + msg + " "  + last_known.getTime() + " Mem: " + txt.substring(18);
             }
             if((readStamp - entryStamp) > max_time)m = m + " Time_issue";
-            if(test > 3)System.out.println(m);
+            if(test > 3)LOGGER.log(Level.INFO, m);
 
         } catch (MalformedURLException e) {
             readStamp = System.currentTimeMillis();
             m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
                     + -1 + " MalformedURLException " + last_known.getTime() + " Mem: 0 " + last_known.getTime();
-            if(test > 3)System.out.println(m);
-            //			                                e.printStackTrace();
+            if(test > 3)LOGGER.log(Level.INFO, m);
+            // e.printStackTrace();
         } catch (IOException e) {
             readStamp = System.currentTimeMillis();
             m = "Invoke_HTTP_Get_" + cnt + ": (" + identityHashCode + "): Took: " + (readStamp-entryStamp) + " ms Response_code_from: " + url + " (" + address + ") "
                     + -1 + " IOException "  + " "  + last_known.getTime() + " Mem: 0 " + last_known.getTime();
-            if(test > 3)System.out.println(m);
-            //			                                e.printStackTrace();
+            if(test > 3)LOGGER.log(Level.INFO, m);
+            // e.printStackTrace();
         }
         return m;
     }
