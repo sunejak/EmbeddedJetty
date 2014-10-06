@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Use "GnuPlot" to show all data.
 #
