@@ -64,9 +64,9 @@ echo "set key left" >> run.plt
 echo "set yrange [ -1 : 5000 ]" >> run.plt
 # offset the Memory values so that they don't cover the Time values
 echo "set y2range [ -2000000 : ]" >> run.plt
-echo "plot pfile using 12:4 t 'Time' axes x1y1 lt rgbcolor \"green\", \\" >> run.plt
-echo "     pfile using 12:9 t 'Status' axes x1y1 lt rgbcolor \"magenta\", \\" >> run.plt
-echo "     pfile using 12:18 t 'Memory' axes x1y2 lt rgbcolor \"black\"" >> run.plt
+echo "plot pfile using 13:5 t 'Time' axes x1y1 lt rgbcolor \"green\", \\" >> run.plt
+echo "     pfile using 13:10 t 'Status' axes x1y1 lt rgbcolor \"magenta\", \\" >> run.plt
+echo "     pfile using 13:19 t 'Memory' axes x1y2 lt rgbcolor \"black\"" >> run.plt
 
 gnuplot run.plt
 rc=$?
