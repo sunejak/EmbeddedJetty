@@ -5,7 +5,10 @@ su
 yum install gnuplot
 yum install java
 exit
-wget
+wget https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+wget https://github.com/sunejak/EmbeddedJetty/raw/master/src/main/scripts/Generate_plot.sh
+wget https://github.com/sunejak/EmbeddedJetty/raw/master/src/main/scripts/Gnuplot_all.sh
+
 
 # using sites in
 
@@ -27,9 +30,15 @@ nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.ket
 
 vaenern.kau.nornet
 
+ssh ntnu_test@vaenern.sunet.kau.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.vaenern.sunet.kau.nornet
+
 # Bergen
 
 floeibanen.uib.nornet
+
+ssh ntnu_test@floeibanen.uninett.uib.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.floeibanen.uninett.uib.nornet ntnu-test.floeibanen.bkk.uib.nornet
 
 # Oslo
 
