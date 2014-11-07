@@ -52,6 +52,8 @@ public class WebServer {
 
         // use a jersey based servlet
         final ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
+        servletContextHandler.setContextPath("/");
+        servletContextHandler.setResourceBase("./plots/");
         final ServletHolder servletHolder = new ServletHolder(ServletContainer.class);
         // set resource classes to scan
         servletHolder.setInitParameter("com.sun.jersey.config.property.packages", "com.ntnu.sune.resource");
@@ -64,7 +66,7 @@ public class WebServer {
 
         // add servlets
         servletContextHandler.addServlet(servletHolder, "/jax/*");
-        // TODO remove? servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
+        servletContextHandler.addServlet(org.eclipse.jetty.servlet.DefaultServlet.class, "/");
         servletContextHandler.addServlet(new ServletHolder(new DumpServletA()), "/dump/*");
         servletContextHandler.addServlet(new ServletHolder(new ReceiveToken()), "/token/ReceiveToken");
         // add virtual hosts as well
