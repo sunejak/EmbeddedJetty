@@ -90,6 +90,7 @@ public class WebServer {
         requestLog.setAppend(true);
         requestLog.setExtended(true);
         requestLog.setLogTimeZone("GMT+1");
+        requestLog.setLogLatency(true);
         requestLogHandler.setRequestLog(requestLog);
         // fix all the handlers
         HandlerCollection handlers = new HandlerCollection();
