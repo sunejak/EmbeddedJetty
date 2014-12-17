@@ -49,7 +49,7 @@ nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.fur
 
 # Oslo (Simula)
 
-tullinloekka.simula.nornet
+ssh  ntnu_test@tullinloekka.simula.nornet
 
 nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.tullinloekka.uninett.simula.nornet ntnu-test.tullinloekka.hafslund.simula.nornet ntnu-test.tullinloekka.telenor.simula.nornet
 

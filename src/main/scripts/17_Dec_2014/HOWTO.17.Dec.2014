@@ -1,0 +1,55 @@
+#
+# Experiment 19 December 2014
+#
+su
+yum install gnuplot
+yum install java
+exit
+wget https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh  -o ConnectTimeout=10  sune@sune.simula.nornet
+
+# running webserver on oesthorn
+
+nohup ./jre1.7.0_51/bin/java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 gatekeeper.nntb.no &
+
+# using sites in
+
+# Tromsø
+
+aunegaarden.uit.nornet
+
+ssh ntnu_test@aunegaarden.uninett.uit.nornet wget -O Server-1.0-SNAPSHOT-jar-with-dependencies.jar https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh ntnu_test@aunegaarden.uninett.uit.nornet nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.aunegaarden.uninett.uit.nornet ntnu-test.aunegaarden.telenor.uit.nornet ntnu-test.aunegaarden.powertech.uit.nornet
+
+# Duisburg-Essen
+
+kettwig.ude.nornet
+
+ssh ntnu_test@kettwig.dfn.ude.nornet wget -O Server-1.0-SNAPSHOT-jar-with-dependencies.jar https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh ntnu_test@kettwig.dfn.ude.nornet nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.kettwig.dfn.ude.nornet ntnu-test.kettwig.versatel.ude.nornet
+
+# Karlstad
+
+vaenern.kau.nornet
+
+ssh ntnu_test@vaenern.sunet.kau.nornet wget -O Server-1.0-SNAPSHOT-jar-with-dependencies.jar https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh ntnu_test@vaenern.sunet.kau.nornet nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.vaenern.sunet.kau.nornet
+
+# Bergen
+
+floeibanen.uib.nornet
+
+ssh ntnu_test@floeibanen.uninett.uib.nornet wget -O Server-1.0-SNAPSHOT-jar-with-dependencies.jar https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh ntnu_test@floeibanen.uninett.uib.nornet nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.floeibanen.uninett.uib.nornet ntnu-test.floeibanen.bkk.uib.nornet
+
+# Oslo
+
+furuset.uio.nornet
+
+ssh ntnu_test@furuset.uninett.uio.nornet wget -O Server-1.0-SNAPSHOT-jar-with-dependencies.jar https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh ntnu_test@furuset.uninett.uio.nornet nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.furuset.uninett.uio.nornet ntnu-test.furuset.broadnet.uio.nornet ntnu-test.furuset.powertech.uio.nornet
+
+# Oslo (Simula)
+
+ssh ntnu_test@ullern.simula.nornet wget -O Server-1.0-SNAPSHOT-jar-with-dependencies.jar https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh ntnu_test@ullern.simula.nornet nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 ntnu-test.ullern.uninett.simula.nornet ntnu-test.ullern.kvantel.simula.nornet ntnu-test.ullern.telenor.simula.nornet  ntnu-test.ullern.powertech.simula.nornet
