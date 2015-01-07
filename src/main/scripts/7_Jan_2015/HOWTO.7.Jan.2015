@@ -1,0 +1,28 @@
+#
+# Experiment 19 December 2014
+#
+su
+yum install gnuplot
+yum install java
+exit
+wget https://github.com/sunejak/EmbeddedJetty/raw/master/target/Server-1.0-SNAPSHOT-jar-with-dependencies.jar
+ssh  -o ConnectTimeout=10  sune@sune.simula.nornet
+
+# running webserver on oesthorn
+
+nohup ./jre1.7.0_51/bin/java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 8090 gatekeeper.nntb.no &
+
+# using sites in
+
+# Trondheim
+
+ssh -v ntnu_test@bybro.ntnu.nornet
+ssh -v ntnu_test@bakklandet.ntnu.nornet
+ssh -v ntnu_test@byaasen.ntnu.nornet
+ssh -v ntnu_test@lerkendal.ntnu.nornet
+ssh -v ntnu_test@bymarka.ntnu.nornet
+ssh -v ntnu_test@heimdal.ntnu.nornet
+ssh -v ntnu_test@hovedoeya.hioa.nornet
+ssh -v ntnu_test@bybro.ntnu.nornet
+ssh -v ntnu_test@heimdal.ntnu.nornet
+
