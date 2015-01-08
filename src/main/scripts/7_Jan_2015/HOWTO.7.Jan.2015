@@ -16,16 +16,22 @@ nohup ./jre1.7.0_51/bin/java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 
 
 # Trondheim
 
-ssh -v ntnu_test@bybro.ntnu.nornet
+
 ssh -v ntnu_test@bakklandet.ntnu.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.bakklandet.uninett.ntnu.nornet ntnu-test.bakklandet.powertech.ntnu.nornet 
+
 ssh -v ntnu_test@byaasen.ntnu.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.byaasen.uninett.ntnu.nornet ntnu-test.byaasen.powertech.ntnu.nornet 
+
 ssh -v ntnu_test@lerkendal.ntnu.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.lerkendal.uninett.ntnu.nornet ntnu-test.lerkendal.powertech.ntnu.nornet 
+
 ssh -v ntnu_test@bymarka.ntnu.nornet
-ssh -v ntnu_test@heimdal.ntnu.nornet
-ssh -v ntnu_test@hovedoeya.hioa.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.bymarka.uninett.ntnu.nornet ntnu-test.bymarka.powertech.ntnu.nornet 
+
 ssh -v ntnu_test@bybro.ntnu.nornet
-java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.bybro.uninett.ntnu.nornet ntnu-test.bybro.powertech.ntnu.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.bybro.uninett.ntnu.nornet ntnu-test.bybro.powertech.ntnu.nornet
 
 ssh -v ntnu_test@heimdal.ntnu.nornet
-java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.heimdal.uninett.ntnu.nornet ntnu-test.heimdal.powertech.ntnu.nornet
+nohup java -jar Server-1.0-SNAPSHOT-jar-with-dependencies.jar 9090 ntnu-test.heimdal.uninett.ntnu.nornet ntnu-test.heimdal.powertech.ntnu.nornet
 
